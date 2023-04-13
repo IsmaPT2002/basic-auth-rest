@@ -10,8 +10,9 @@ class Server {
         this.port = process.env.PORT;
 
         this.paths = {
-            register:   '/auth/register',
-            login:      '/auth/login',
+            auth:       '/api/auth',
+            marcas:     '/api/marcas',
+            usuarios:   '/api/usuarios',
         }
 
 
@@ -45,8 +46,9 @@ class Server {
 
     routes() {
         
-        this.app.use( this.authPath, require('../routes/auth') );
-        this.app.use( this.loginPath, require('../routes/login') );
+        this.app.use( this.paths.auth, require('../routes/auth'));
+        this.app.use( this.paths.marcas, require('../routes/marcas'));
+        this.app.use( this.paths.usuarios, require('../routes/usuarios'));
     }
 
     listen() {

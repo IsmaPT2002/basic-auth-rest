@@ -1,5 +1,5 @@
 const { response } = require('express');
-const { Marca } = require('../models');
+const { Marca } = require('../models/marca');
 
 const obtenerMarcas = async(req, res = response ) => {
 

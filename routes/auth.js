@@ -16,7 +16,7 @@ router.post('/login',[
     validarCampos
 ],login );
 
-router.post('/google',[
+router.post('/register',[
     check('id_token', 'El id_token es necesario').not().isEmpty(),
     validarCampos
 ], googleSignin );
