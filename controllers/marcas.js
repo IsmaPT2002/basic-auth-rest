@@ -60,7 +60,7 @@ const crearMarca = async(req, res = response ) => {
 const actualizarMarca = async( req, res = response ) => {
 
     const { id } = req.params;
-    const { estado, usuario, ...data } = req.body;
+    const { data } = req.body;
 
     data.nombre  = data.nombre.toUpperCase();
     data.usuario = req.usuario._id;

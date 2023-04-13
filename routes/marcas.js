@@ -1,7 +1,7 @@
 const { Router } = require('express');
 const { check } = require('express-validator');
 
-const { validarJWT, validarCampos, esAdminRole } = require('../middlewares');
+const { validarJWT, validarCampos } = require('../middlewares');
 
 const { crearMarca,
 obtenerMarcas,
@@ -44,7 +44,6 @@ validarCampos
 // Borrar una marca - Admin
 router.delete('/:id',[
 validarJWT,
-esAdminRole,
 check('id', 'No es un id de Mongo válido').isMongoId(),
 check('id').custom( existeMarcaPorId ),
 validarCampos,
