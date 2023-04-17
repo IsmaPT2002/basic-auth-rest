@@ -8,44 +8,35 @@ const {
 } = require('../middlewares');
 
 
-const { emailExiste, existeUsuarioPorId } = require('../helpers/db-validators');
+const { existeUsuarioPorId } = require('../helpers/db-validators');
 
-const { usuariosGet,
-        usuariosPut,
-        usuariosPost,
-        usuariosDelete,
-        usuariosPatch } = require('../controllers/usuarios');
+const { obtenerUsuario, obtenerUsuario, actualizarUsuario, borrarUsuario } = require('../controllers/usuarios');
 
 const router = Router();
 
 
-router.get('/', usuariosGet );
+router.get('/', obtenerUsuarios );
+
+router.get('/:id',[
+    check('id', 'No es un ID válido').isMongoId(),
+    check('id').custom( existeUsuarioPorId ),
+    validarCampos
+], obtenerUsuario );
 
 router.put('/:id',[
     check('id', 'No es un ID válido').isMongoId(),
     check('id').custom( existeUsuarioPorId ),
     validarCampos
-],usuariosPut );
-
-router.post('/', usuariosPost );
-// [
-//     // check('nombre', 'El nombre es obligatorio').not().isEmpty(),
-//     // check('password', 'El password debe de ser más de 6 letras').isLength({ min: 6 }),
-//     // check('correo', 'El correo no es válido').isEmail(),
-//     // check('correo').custom( emailExiste ),
-//     // validarCampos
-// ],
+], actualizarUsuario );
 
 router.delete('/:id',[
     validarJWT, 
     check('id', 'No es un ID válido').isMongoId(),
     check('id').custom( existeUsuarioPorId ),
     validarCampos
-],usuariosDelete );
+], borrarUsuario );
 
 router.patch('/', usuariosPatch );
-
-
 
 
 

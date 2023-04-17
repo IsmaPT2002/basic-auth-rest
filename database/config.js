@@ -7,7 +7,6 @@ const dbConnection = async() => {
     try {
 
         await mongoose.connect( process.env.MONGODB_CNN );
-    
         console.log('Base de datos online');
 
     } catch (error) {
@@ -19,6 +18,4 @@ const dbConnection = async() => {
 }
 
 
-module.exports = {
-    dbConnection
-}
+module.exports = dbConnection;

@@ -1,17 +1,15 @@
 const { response } = require('express');
-const { Marca } = require('../models/marca');
+const Marca = require('../models/marca');
 
-const obtenerMarcas = async(req, res = response ) => {
+const obtenerMarcas = async (req = request, res = response) => {
 
     const { limite = 5, desde = 0 } = req.query;
-    const query = { estado: true };
 
-    const [ total, marcas ] = await Promise.all([
-        Marca.countDocuments(query),
-        Marca.find(query)
-            .populate('usuario', 'nombre')
-            .skip( Number( desde ) )
-            .limit(Number( limite ))
+    const [total, marcas] = await Promise.all([
+        Marca.countDocuments(),
+        Marca.find()
+            .skip(Number(desde))
+            .limit(Number(limite))
     ]);
 
     res.json({
@@ -20,11 +18,11 @@ const obtenerMarcas = async(req, res = response ) => {
     });
 }
 
+
 const obtenerMarca = async(req, res = response ) => {
 
     const { id } = req.params;
-    const marca = await Marca.findById( id )
-                            .populate('usuario', 'nombre');
+    const marca = await Marca.findById( id );
 
     res.json( marca );
 
@@ -32,7 +30,7 @@ const obtenerMarca = async(req, res = response ) => {
 
 const crearMarca = async(req, res = response ) => {
 
-    const nombre = req.body.nombre.toUpperCase();
+    const { nombre, descripcion } = req.body;
 
     const marcaDB = await Marca.findOne({ nombre });
 
@@ -45,16 +43,17 @@ const crearMarca = async(req, res = response ) => {
     // Generar la data a guardar
     const data = {
         nombre,
-        usuario: req.usuario._id
+        descripcion
     }
 
     const marca = new Marca( data );
 
-    // Guardar DB
+    // Guardar en BD
     await marca.save();
 
-    res.status(201).json(marca);
-
+    res.status(201).json({
+        marca
+    });
 }
 
 const actualizarMarca = async( req, res = response ) => {
@@ -74,7 +73,7 @@ const actualizarMarca = async( req, res = response ) => {
 const borrarMarca = async(req, res =response ) => {
 
     const { id } = req.params;
-    const marcaBorrada = await Marca.findByIdAndUpdate( id, { estado: false }, {new: true });
+    const marcaBorrada = await Marca.findByIdAndDelete( id );
 
     res.json( marcaBorrada );
 }
